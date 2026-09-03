@@ -1,0 +1,13 @@
+# Experiment 2: Viva Questions and Answers
+
+**1. Contrast reactive, deliberative and hybrid agent architectures.**
+*   **Reactive Agents:** These agents operate on a simple sense-react loop. They map current percepts directly to actions using condition-action rules without maintaining an internal state or model of the world. They are fast and robust to dynamic changes but struggle with long-horizon goals or partially observable environments.
+*   **Deliberative Agents:** These agents maintain an internal state (world model) and reason about the future. They plan a sequence of actions (using search algorithms like BFS) to achieve a specific goal before acting out the plan (sense-plan-act loop). They are excellent for complex, long-term goals but can be slow and assume the environment remains static during execution.
+*   **Hybrid Agents:** These combine the best of both worlds by layering architectures. They use a deliberative layer for long-term planning and a reactive layer for immediate responses to dynamic changes or imminent hazards (e.g., avoiding a sudden pit or obstacle). This provides both goal-directed optimality and environmental robustness.
+
+**2. Why does BFS guarantee the shortest path here, and when would A\* be preferred?**
+*   **Why BFS guarantees the shortest path:** BFS explores all nodes at the present depth level before moving on to the nodes at the next depth level. Since each step in a standard grid has an equal uniform cost (cost = 1), finding the goal at the shallowest depth corresponds exactly to the path with the minimum number of steps (i.e., the shortest path).
+*   **When A\* would be preferred:** A\* would be preferred in large search spaces or when steps have varying costs (like in a terrain map with different movement costs). A\* uses a heuristic to guide the search towards the goal, drastically reducing the number of nodes expanded while still guaranteeing an optimal path, making it much more efficient than BFS or Uniform-Cost Search.
+
+**3. What assumption of deliberative planning does re-planning address?**
+*   Re-planning addresses the central assumption that the **environment is static** and the **agent's internal model is perfectly accurate**. Deliberative agents assume the world will not change while they execute their pre-calculated plan. If a dynamic obstacle appears or an action fails (breaking this assumption), the initial plan becomes invalid. Re-planning allows the agent to detect this failure and compute a new path to the goal from its current state, restoring its ability to reach the goal despite a dynamic or partially unknown environment.
