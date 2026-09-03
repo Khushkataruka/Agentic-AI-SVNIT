@@ -1,0 +1,119 @@
+=== TOOL SCHEMAS ===
+[
+  {
+    "name": "calculator",
+    "description": "Evaluates an arithmetic expression in a restricted namespace (sqrt, pow, pi).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "description": "The arithmetic expression to evaluate."
+        }
+      },
+      "required": [
+        "expression"
+      ]
+    }
+  },
+  {
+    "name": "days_between",
+    "description": "Calculates the whole number of days between two dates.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "d1": {
+          "type": "string",
+          "description": "First date (ISO YYYY-MM-DD)"
+        },
+        "d2": {
+          "type": "string",
+          "description": "Second date (ISO YYYY-MM-DD)"
+        }
+      },
+      "required": [
+        "d1",
+        "d2"
+      ]
+    }
+  },
+  {
+    "name": "unit_convert",
+    "description": "Converts a value between km/miles, kg/lb, or C/F.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "The value to convert"
+        },
+        "frm": {
+          "type": "string",
+          "description": "Source unit (km, miles, kg, lb, C, F)"
+        },
+        "to": {
+          "type": "string",
+          "description": "Target unit (km, miles, kg, lb, C, F)"
+        }
+      },
+      "required": [
+        "value",
+        "frm",
+        "to"
+      ]
+    }
+  },
+  {
+    "name": "csv_mean",
+    "description": "Reads a CSV file and returns the mean of a named column.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "Path to the CSV file"
+        },
+        "column_name": {
+          "type": "string",
+          "description": "Name of the column"
+        }
+      },
+      "required": [
+        "filename",
+        "column_name"
+      ]
+    }
+  }
+]
+
+=== RUNNING NORMAL TOOL CALLS ===
+Tool Call: {"name": "calculator", "arguments": {"expression": "pow(2, 3)"}}
+Observation: {"observation": 8.0}
+
+Tool Call: {"name": "days_between", "arguments": {"d1": "2023-01-01", "d2": "2023-01-31"}}
+Observation: {"observation": 30}
+
+Tool Call: {"name": "unit_convert", "arguments": {"value": 100, "frm": "km", "to": "miles"}}
+Observation: {"observation": 62.137100000000004}
+
+=== RUNNING EXERCISE 1 (Error Handling) ===
+Malformed JSON:
+Tool Call: {"name": "calculator", "arguments": {"expression": "pow(2, 3)"}
+Observation: {"error": "Malformed JSON: Expecting ',' delimiter: line 1 column 64 (char 63)"}
+
+Unknown Tool:
+Tool Call: {"name": "unknown_tool", "arguments": {}}
+Observation: {"error": "Unknown tool: unknown_tool"}
+
+Wrong Argument Name:
+Tool Call: {"name": "calculator", "arguments": {"expr": "pow(2, 3)"}}
+Observation: {"error": "Wrong argument name/type for calculator: calculator() got an unexpected keyword argument 'expr'"}
+
+Exception inside tool:
+Tool Call: {"name": "calculator", "arguments": {"expression": "1 / 0"}}
+Observation: {"error": "Exception inside tool calculator: division by zero"}
+
+=== RUNNING EXERCISE 2 (CSV Mean Tool) ===
+Tool Call: {"name": "csv_mean", "arguments": {"filename": "data.csv", "column_name": "A"}}
+Observation: {"observation": 20.0}
+
